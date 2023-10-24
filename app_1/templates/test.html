@@ -1,0 +1,9 @@
+{% extends "base_template.html" %}
+{% block content %}
+    {% for d in docs%}
+    Ukupno kreirano dokumenata: {{d.created}}<br>
+    Podijeljeno s barem 2 studenta: {{d.shared}}<br>
+    Podijeljeno s nijednim studentom: {{d.not_shared}}<br><br>
+    <a href="/{{d.created}}">AAAA</a>
+    {% endfor %}
+{% endblock %}

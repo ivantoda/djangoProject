@@ -1,0 +1,24 @@
+{% extends "base_template.html" %}
+    {% block content %}
+    <div id="adddocument" style="border-style:solid;border-color:lightblue;padding: 10px;margin-top:10px;margin-bottom:10px; width: 40%; margin: 0 auto;">
+        
+    {% block insert_document %}
+    <form method="post" enctype="multipart/form-data">
+    <table>
+    {{form.as_table}}
+    </table>
+    <br><br>
+    <input type = "file" name = 'document'>
+    <br><br>
+    <input type="submit" value="DODAJ DOKUMENT">
+    {% csrf_token %}
+    </form>
+    <br><button class="btn btn-primary" style="background-color: rgb(255, 121, 121);"><a  href="/profesor/{{profesor_data}}/" style="padding: 10px;text-decoration: none;">ODUSTANI</a></button>
+    {% if messages %}
+    <div class="error-message">
+        <p>{{ messages }}</p>
+    </div>
+    {% endif %}
+    {% endblock %}
+    </div>
+{% endblock %}

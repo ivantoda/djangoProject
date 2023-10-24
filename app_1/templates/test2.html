@@ -1,0 +1,9 @@
+{% extends "base_template.html" %}
+{% block content %}
+    {% for data in document %}
+        {{data.profesor.first_name}}
+        {% for s in data.students %}
+            {{s.first_name}}<br>
+        {%endfor%}
+    {% endfor %}
+{% endblock %}

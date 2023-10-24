@@ -1,0 +1,6 @@
+{% extends "base_template.html" %}
+{% block content %}
+    {% for data in prof_data %}
+        <a href="{{data.professor_name}}/{{data.shared_documents_count}}">{{data.professor_name}} {{data.shared_documents_count}}</a>
+    {% endfor %}
+{% endblock %}

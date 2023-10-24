@@ -1,0 +1,76 @@
+{% extends "base_template.html" %}
+{% block content %}
+{% block profesor %}
+<div style="padding-left: 5px;">
+    <h2 style="text-align:center;">Profesor</h3>
+    <div class="user_info">
+        <p style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Username: <span style="color: blue;">{{ profesor_data.username }}</span></span>
+            <button class="btn btn-primary" style="padding: 10px; text-decoration: none; background-color: lightblue;" onclick="confirmLogout()">
+                <a href="/logout" style="text-decoration: none;">LOGOUT</a>
+            </button>
+        </p>
+    </div>
+</div>
+{% endblock %}
+{% block documents %}
+
+<div style="padding: 10px;margin-top:20px;margin-bottom:20px;"><button class="btn btn-primary" style="float:left;">
+    <a  href="/add_document" style="padding: 10px;text-decoration: none;">DODAJ DOKUMENT</a></button>
+</div>
+
+<div style="padding: 10px;margin-top:20px;margin-bottom:20px;">
+    <h3>Dokumenti</h3>
+    <div>
+        {% if document_data %}
+        <p>Sortiraj po:  
+        <a href="?order=date_asc">Datum uzlazno</a> |
+        <a href="?order=date_desc">Datum silazno</a></p>
+    </div>
+    <table>
+        
+        <tr style="padding: 5px;">
+            <th style="padding: 5px;width:max-content">Naslov</th>
+            <th style="padding: 5px;width:max-content">Datum kreiranja</th>
+            <th style="padding: 5px;width:max-content">Putanja</th>
+            <th></th>
+            <th></th>
+        </tr>
+        
+        {% for document in document_data %}
+        <tr>
+            <td style="padding: 5px;">{{ document.title }} </td>
+            <td style="padding: 5px;">{{ document.created }} </td>
+            <td style="padding: 5px;">{{ document.path }} </td>
+            <td style="padding: 5px;"><button class="btn btn-primary" style="padding: 5px; text-decoration: none;"><a href="/update_document/{{ document.id }}" style="text-decoration: none;">Uredi</a></button></td>
+            <td style="padding: 5px;"><button class="btn btn-primary" style="padding: 5px; text-decoration: none;background-color: rgb(226, 75, 75); "><a href="/delete_document/{{ document.id }}" style="text-decoration: none;">Izbriši</a></button></td>
+            <td style="padding: 5px;"><button class="btn btn-primary" style="padding: 5px; text-decoration: none;"><a href="/share_document/{{ document.id }}" style="text-decoration: none;">Dijeljenje dokumenta</a></button></td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td style="padding: 5px;"> <p style="color: red;">NEMATE DOKUMENATA </p></td></tr>
+        {% endif %}
+        </table>
+</div>
+<div style="float:center;padding: 10px;">
+    {% if document_data.has_previous %}
+    <a href="?page=1" style="text-decoration: none;">&#9198;</a>
+    <a href="?page={{ document_data.previous_page_number }}" style="text-decoration: none;">&#9194;</a>
+    {% endif %}
+    Stranica {{ document_data.number }} of {{ document_data.paginator.num_pages }}
+    {% if document_data.has_next %}
+    <a href="?page={{ document_data.next_page_number }}" style="text-decoration: none;">&#9193;</a>
+    <a href="?page={{ document_data.paginator.num_pages }}" style="text-decoration: none;">&#9197;</a>
+    {% endif %}
+    </div>
+{% endblock %}
+<a href="/ispit/">AAA</a>
+<script>
+    function confirmLogout() {
+        if (confirm("Sigurno se želite odjaviti?")) {
+            window.location.href = "/logout";
+        }else{}
+        }
+</script>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base_template.html" %}
+{% block content %}
+{% block student %}
+<div style="padding-left: 5px;">
+    <h2 style="text-align:center;">Student</h3>
+    <div class="user_info">
+        <p style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Username: <span style="color: blue;">{{ student_data.username }}</span></span>
+            <button class="btn btn-primary" style="padding: 10px; text-decoration: none; background-color: lightblue;" onclick="confirmLogout()">
+                <a href="/logout" style="text-decoration: none;">LOGOUT</a>
+            </button>
+        </p>
+    </div>
+</div>
+{% endblock %}
+{% block documents %}
+<div style="padding: 10px;margin-top:20px;margin-bottom:20px;">
+    <h3>Dokumenti</h3>
+    <div>
+        <p>Sortiraj po:  
+        <a href="?order=title_asc">Naslov uzlazno</a> |
+        <a href="?order=title_desc">Naslov silazno</a> |
+        <a href="?order=date_asc">Datum uzlazno</a> |
+        <a href="?order=date_desc">Datum silazno</a></p>
+    </div>
+    <span style="margin: 10px;">
+        <form action="" class = "sort__form" method="GET">
+            <select class= "filter__select" name="select_filtering">
+                <option disabled selected> Filtriraj po profesoru</option>
+                {% for prof in profesor_data %}
+                    <option value="{{prof.username}}">{{prof.first_name}} {{prof.last_name}}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="FILTRIRAJ">
+            <button type="button" onclick="resetFilters()">Poništi filter</button>
+        </form>
+    </span>
+    <table>
+        <tr style="padding: 5px;">
+            <th style="padding: 5px;width:max-content">Naslov</th>
+            <th style="padding: 5px;width:max-content">Datum kreiranja</th>
+            <th style="padding: 5px;width:max-content">Profesor</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for document in document_data %}
+        <tr>
+            <td style="padding: 5px;">{{ document.title }} </td>
+            <td style="padding: 5px;">{{ document.created }} </td>
+            {% for prof in profesor_data %}
+                {% if document.creator_id == prof.id %}
+                <td style="padding: 5px;"> {{ prof.first_name }} {{ prof.last_name }}</td>
+                {% endif %}
+            {% endfor %}
+            <td style="padding: 5px;"><button class="btn btn-primary" style="padding: 5px; text-decoration: none;"><a href="{% url 'download_file' document.path %}" download="{{ document.title }}">Download</a>
+            </button>
+            </td>
+         </tr>
+        {% endfor %}
+        </table>
+</div>
+<div style="float:center;padding: 10px;">
+    {% if document_data.has_previous %}
+    <a href="?page=1" style="text-decoration: none;">&#9198;</a>
+    <a href="?page={{ document_data.previous_page_number }}" style="text-decoration: none;">&#9194;</a>
+    {% endif %}
+    Stranica {{ document_data.number }} of {{ document_data.paginator.num_pages }}
+    {% if document_data.has_next %}
+    <a href="?page={{ document_data.next_page_number }}" style="text-decoration: none;">&#9193;</a>
+    <a href="?page={{ document_data.paginator.num_pages }}" style="text-decoration: none;">&#9197;</a>
+    {% endif %}
+    </div>
+{% endblock %}
+<script>
+    function resetFilters() {
+        const selectElement = document.querySelector('.filter__select');
+        selectElement.selectedIndex = 0; 
+        document.querySelector('.sort__form').submit();
+    }
+    function confirmLogout() {
+        if (confirm("Sigurno se želite odjaviti?")) {
+            window.location.href = "/logout";
+        }else{}
+}
+</script>
+{% endblock %}

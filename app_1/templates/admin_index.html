@@ -1,0 +1,91 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+{% block admin %}
+<div style="padding-left: 5px;">
+    <h2 style="text-align:center;">Admin Site</h3>
+    <div class="user_info">
+        <p style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Username: <span style="color: blue;">{{ admin_data.username }}</span></span>
+            <button class="btn btn-primary" style="padding: 10px; text-decoration: none; background-color: lightblue;" onclick="confirmLogout()">
+                <a href="/logout" style="text-decoration: none;">LOGOUT</a>
+            </button>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block users %}
+
+<div style="padding: 10px;margin-top:20px;margin-bottom:20px;"><button class="btn btn-primary" style="float:left;">
+    <a  href="/add_user" style="padding: 10px;text-decoration: none;">DODAJ KORISNIKA</a></button>
+</div>
+<div style="border: 2px; border-style:solid;border-color:green;padding: 20px;margin-top:10px;margin-bottom:10px">   
+    <h3>Korisnici</h3>
+    <div style="float:center;">
+        <span style="margin: 10px;">
+            <form action="" class = "sort__form" method="GET">
+                <select class= "filter__select" name="select_filtering">
+                    <option disabled selected> Filtriraj po ulozi</option>
+                    <option value="administrator">Administrator</option>
+                    <option value="profesor">Profesor</option>
+                    <option value="student">Student</option>
+                </select>
+                <input type="submit" value="FILTRIRAJ">
+                <button type="button" onclick="resetFilters()">Prikaži sve korisnike</button>
+            </form>
+        </span>
+    </div>
+    <table>
+    <tr style="padding: 5px;">
+        <th style="padding: 5px;width:max-content">Ime</th>
+        <th style="padding: 5px;width:max-content">Prezime</th>
+        <th style="padding: 5px;width:max-content">Korisničko ime</th>
+        <th style="padding: 5px;width:max-content">Email</th>
+        <th style="padding: 5px;width:max-content">Uloga</th>
+        <th></th>
+        <th></th>
+    </tr>
+    {% for user in user_data %}
+    <tr>
+        <td style="padding: 5px;">{{ user.first_name }} </td>
+        <td style="padding: 5px;">{{ user.last_name }} </td>
+        <td style="padding: 5px;">{{ user.username }} </td>
+        <td style="padding: 5px;">{{ user.email }} </td>
+        <td style="padding: 5px;">{{ user.role }} </td>
+        <td style="padding: 5px;"><button class="btn btn-primary" style="padding: 5px; text-decoration: none;"><a href="/update_user/{{ user.id }}" style="text-decoration: none;">Uredi</a></button></td>
+        {% if user.role != "administrator" %}
+        <td style="padding: 5px;"><button class="btn btn-primary" style="padding: 5px; text-decoration: none;background-color: rgb(226, 75, 75); "><a href="/delete_user/{{ user.id }}" style="text-decoration: none;">Izbriši</a></button></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </table>
+
+    <div style="float:center;padding: 10px;">
+        {% if user_data.has_previous %}
+        <a href="?page=1" style="text-decoration: none;">&#9198;</a>
+        <a href="?page={{ user_data.previous_page_number }}" style="text-decoration: none;">&#9194;</a>
+        {% endif %}
+        Stranica {{ user_data.number }} of {{ user_data.paginator.num_pages }}
+        {% if user_data.has_next %}
+        <a href="?page={{ user_data.next_page_number }}" style="text-decoration: none;">&#9193;</a>
+        <a href="?page={{ user_data.paginator.num_pages }}" style="text-decoration: none;">&#9197;</a>
+        {% endif %}
+        </div>
+</div>
+
+<a href="/admin_test/">AAA </a>
+{% endblock %}
+<script>
+    function resetFilters() {
+        const selectElement = document.querySelector('.filter__select');
+        selectElement.selectedIndex = 0; 
+        document.querySelector('.sort__form').submit();
+    }
+    function confirmLogout() {
+        if (confirm("Sigurno se želite odjaviti?")) {
+            window.location.href = "/logout";
+        }else{}
+}
+</script>
+{% endblock %}

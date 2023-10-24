@@ -1,0 +1,26 @@
+{% extends "base_template.html" %}
+{% block content %}
+    {% block login %}
+
+    <div id="login" style="padding: 20px; margin: 0 auto; text-align: center;">
+        <h1>PRIJAVA</h1>
+        <form class="form-horizontal" name="LoginForm" action="/login/" method="post">
+        {% csrf_token %}
+        <div class="control-group" style="padding: 20px; margin-top: 5px; margin-bottom: 5px; border: 2px solid blue; width: 20%;display: inline-block; background-color: aliceblue;">
+            <label class="control-label" for="username">Username</label>
+                <input type="text" id="username" name="username"  placeholder="username" style="margin-top: 5px;margin-bottom: 5px;"><br>
+            <label class="control-label" for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="password" style="margin-top: 5px;margin-bottom: 5px;">
+        </div>
+        <div class="control-group" style="margin-left: 20px">
+            <div class="controls">
+                {% if message %}
+                <h4>{{ message }}</h4>
+                {% endif %}
+                <button type="submit" class="btn" style="padding: 10px;margin-top: 5px;margin-bottom: 5px;">LOGIN</button>
+            </div>
+        </div>
+        </form>
+    </div>
+    {% endblock %}
+{% endblock %}
